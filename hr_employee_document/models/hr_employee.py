@@ -23,7 +23,7 @@ class HrEmployeeBase(models.AbstractModel):
             record.document_count = count_dict.get(record.id, 0)
 
     def action_get_attachment_tree_view(self):
-        action = self.env.ref("base.action_attachment").read()[0]
+        action = self.env.ref("base.action_attachment").sudo().read()[0]
         action["context"] = {
             "default_res_model": self._name,
             "default_res_id": self.ids[0],
