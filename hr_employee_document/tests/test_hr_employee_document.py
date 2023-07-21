@@ -1,5 +1,5 @@
 # Copyright 2018 Brainbean Apps (https://brainbeanapps.com)
-# Copyright 2021-2022 Tecnativa - Víctor Martínez
+# Copyright 2021-2023 Tecnativa - Víctor Martínez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import base64
@@ -11,17 +11,19 @@ from odoo.tests.common import users
 class TestHrEmployeeDocument(common.TransactionCase):
     def setUp(self):
         super().setUp()
-        ctx = {
-            "mail_create_nolog": True,
-            "mail_create_nosubscribe": True,
-            "mail_notrack": True,
-            "no_reset_password": True,
-        }
-        self.user_1 = new_test_user(self.env, login="test-user-1", context=ctx)
-        self.user_2 = new_test_user(self.env, login="test-user-2", context=ctx)
-        new_test_user(
-            self.env, login="test-user-manager", groups="hr.group_hr_user", context=ctx
+        self.env = self.env(
+            context=dict(
+                self.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
         )
+        self.user_1 = new_test_user(self.env, login="test-user-1")
+        self.user_2 = new_test_user(self.env, login="test-user-2")
+        new_test_user(self.env, login="test-user-manager", groups="hr.group_hr_user")
         self.employee_1 = self.env["hr.employee"].create(
             {"name": "Employee #1", "user_id": self.user_1.id}
         )
@@ -63,7 +65,9 @@ class TestHrEmployeeDocument(common.TransactionCase):
         # create attachments
         attachment_1 = self._create_attachment(self.employee_1)
         attachment_2 = self._create_attachment(self.employee_2)
-        records = self.env["ir.attachment"].search([])
+        records = self.env["ir.attachment"].search(
+            [("res_model", "=", "hr.employee"), ("res_id", "=", self.employee_1.id)]
+        )
         self.assertIn(attachment_1, records)
         self.assertNotIn(attachment_2, records)
 
@@ -72,7 +76,9 @@ class TestHrEmployeeDocument(common.TransactionCase):
         # create attachments
         attachment_1 = self._create_attachment(self.employee_1)
         attachment_2 = self._create_attachment(self.employee_2)
-        records = self.env["ir.attachment"].search([])
+        records = self.env["ir.attachment"].search(
+            [("res_model", "=", "hr.employee"), ("res_id", "=", self.employee_2.id)]
+        )
         self.assertNotIn(attachment_1, records)
         self.assertIn(attachment_2, records)
 
