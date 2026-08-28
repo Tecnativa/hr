@@ -133,7 +133,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
 
     @mute_logger("odoo.models.unlink")
     def test_calendar_planning(self):
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (
@@ -182,7 +182,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
     @mute_logger("odoo.models.unlink")
     def test_calendar_planning_two_weeks(self):
         self.calendar1.switch_calendar_type()
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (
@@ -208,7 +208,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
 
     @mute_logger("odoo.models.unlink")
     def test_resource_calendar_constraint(self):
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (
@@ -257,7 +257,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
                         0,
                         0,
                         {
-                            "date_start": fields.Date.today(),
+                            "date_start": fields.Date.context_today(self),
                             "calendar_id": self.calendar2.id,
                         },
                     ),
@@ -268,7 +268,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
 
     @mute_logger("odoo.models.unlink")
     def test_copy_global_leaves(self):
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (
@@ -374,7 +374,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
 
     @mute_logger("odoo.models.unlink")
     def test_onchange_update_visual_hours(self):
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (
@@ -488,7 +488,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
 
     @mute_logger("odoo.models.unlink")
     def test_planning_gap(self):
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (
@@ -507,7 +507,7 @@ class TestHrEmployeeCalendarPlanning(BaseCommon):
 
     @mute_logger("odoo.models.unlink")
     def test_write_planning_dates(self):
-        today = fields.Date.today()
+        today = fields.Date.context_today(self)
         self.employee.calendar_ids = [(5, 0, 0)]
         self.employee.calendar_ids = [
             (0, 0, {"date_start": today, "calendar_id": self.calendar2.id})
