@@ -217,7 +217,7 @@ class HrEmployee(models.Model):
         self.ensure_one()
         new = super().copy(default)
         # Define a good main calendar for being able to regenerate it later
-        new.resource_id.calendar_id = fields.first(new.calendar_ids).calendar_id
+        new.resource_id.calendar_id = new.calendar_ids[:1].calendar_id
         new.filtered("calendar_ids").regenerate_calendar()
         return new
 
